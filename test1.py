@@ -1,10 +1,15 @@
 # Test Program
 
-x=[4,2,5,8,3,4,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7,9,8,7,6,9,8,7]
+import polars as pl
 
-print("Look at this : ")
-for i in x:
-    print(i^2)
+cr='\n'
+q = (
+    pl.scan_csv("iris.csv")
+    .filter(pl.col("sepal.length") > 5)
+    .group_by("variety")
+    .agg(pl.all().sum())
+)
 
-# The End
+df = q.collect()
+print(cr,df,cr)
 
